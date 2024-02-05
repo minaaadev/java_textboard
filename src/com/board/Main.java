@@ -21,11 +21,15 @@ public class Main {
 		List<Article> articles = new ArrayList<>();		
 		
 		
-		//프로그램 리펙토링 <=좀더 읽기 편한걸로 바꿔줌
-		
-        
+		//프로그램 리펙토링 <=좀더 읽기 편한걸로 바꿔줌        
         makeTestData(articles);
         
+        if(articles.size()>0) {
+        	articleLastId=articles.get(articles.size()-1).id;
+        }
+        //get으로 게시물 가져옴. articles.size()-1하면 2번째 게시물 가져옴
+        //2번째 게시물의 .id를 가져온다. 0,1,2, 3번게시물 가져옴
+        //articleLastId에 3을 넣어줌. 
 		System.out.println("=== * 자바 텍스트 게시판 * ===");
 		System.out.println("===프로그램 시작===");
 		
@@ -47,8 +51,9 @@ public class Main {
 				Article article = new Article(id, title, content);
 				articles.add(article);
 				
-				System.out.printf("%d번 게시물이 등록되었습니다.\n", id);				
-				System.out.printf("생성된 게시물 객체: "+article);
+				articles.add(article); //list에 게시물 추가
+				
+				System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
 			}
 				else if(cmd.equals("/usr/article/list")) {
 					System.out.println("==게시물 리스트==");
@@ -56,7 +61,8 @@ public class Main {
 					
 					
 					
-					for (Article article:articles) {
+					for (int i=articles.size()-1; i>=0; i--) {
+						Article article=articles.get(i);
 						System.out.printf("%d / %s\n",article.id, article.title);
 					}
 				}

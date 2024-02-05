@@ -24,11 +24,7 @@ public class Article extends Object {
     public static List<Article> getInitialData() {
         List<Article> articles = new ArrayList<>();
 
-        
 
-//        for(Article article:articles) {
-//        	System.out.printf("%d / %s\n", article.id, article.title);
-//        }
         return articles;
 		
 	}

@@ -5,6 +5,14 @@ import java.util.Scanner;
 
 public class Main {
 
+	
+	static void makeTestData(List<Article> articles) {
+		articles.add(new Article(1, "제목1", "내용1"));
+        articles.add(new Article(2, "제목2", "내용2"));
+        articles.add(new Article(3, "제목3", "내용3"));
+	}
+	
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
@@ -13,10 +21,10 @@ public class Main {
 		List<Article> articles = new ArrayList<>();		
 		
 		
-		//데이터 3개 등록
-		articles.add(new Article(1, "제목1", "내용1"));
-        articles.add(new Article(2, "제목2", "내용2"));
-        articles.add(new Article(3, "제목3", "내용3"));
+		//프로그램 리펙토링 <=좀더 읽기 편한걸로 바꿔줌
+		
+        
+        makeTestData(articles);
         
 		System.out.println("=== * 자바 텍스트 게시판 * ===");
 		System.out.println("===프로그램 시작===");
@@ -45,6 +53,8 @@ public class Main {
 				else if(cmd.equals("/usr/article/list")) {
 					System.out.println("==게시물 리스트==");
 					System.out.println("번호/제목");
+					
+					
 					
 					for (Article article:articles) {
 						System.out.printf("%d / %s\n",article.id, article.title);

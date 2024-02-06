@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Main {
 
 	
+	
 	static void makeTestData(List<Article> articles) {
 		articles.add(new Article(1, "제목1", "내용1"));
         articles.add(new Article(2, "제목2", "내용2"));
@@ -27,8 +28,8 @@ public class Main {
         if(articles.size()>0) {
         	articleLastId=articles.get(articles.size()-1).id;
         }
-        //get으로 게시물 가져옴. articles.size()-1하면 2번째 게시물 가져옴
-        //2번째 게시물의 .id를 가져온다. 0,1,2, 3번게시물 가져옴
+        //get 으로 게시물 가져옴. articles.size()-1하면 2번째 게시물 가져옴
+        //2번째 게시물의 .id 를 가져온다. 0,1,2, 3번게시물 가져옴
         //articleLastId에 3을 넣어줌. 
 		System.out.println("=== * 자바 텍스트 게시판 * ===");
 		System.out.println("===프로그램 시작===");
@@ -37,7 +38,9 @@ public class Main {
 			System.out.printf("\n명령 :");
 			String cmd = sc.nextLine();	
 			
-			if (cmd.equals("/usr/article/write")) {
+			Rq rq = new Rq(cmd); 
+					
+			if (rq.getUrlPath().equals("/usr/article/write")) {
 				System.out.println("===게시물 등록 ===");
 				System.out.printf("제목: ");
 				String title = sc.nextLine();
@@ -51,11 +54,11 @@ public class Main {
 				Article article = new Article(id, title, content);
 				articles.add(article);
 				
-				articles.add(article); //list에 게시물 추가
+				articles.add(article); //list 에 게시물 추가
 				
 				System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
 			}
-				else if(cmd.equals("/usr/article/list")) {
+				else if(rq.getUrlPath().equals("/usr/article/list")) {
 					System.out.println("==게시물 리스트==");
 					System.out.println("번호/제목");
 					
@@ -66,14 +69,22 @@ public class Main {
 						System.out.printf("%d / %s\n",article.id, article.title);
 					}
 				}
-				else if(cmd.equals("/usr/article/detail")) {
+				else if(rq.getUrlPath().equals("/usr/article/detail")) {
 					
 					Object lastArticle = null;
 					if(lastArticle==null) {
 						System.out.println("게시물이 존재하지 않습니다.");
+						continue;
 					}
+					//마지막 게시물의 번호 가져옴
+					Article article=articles.get(articles.size()-1); 
+					
+					System.out.println("===게시물 상세보기 ===");
+					System.out.printf("번호 : %d\n", article.id);
+					System.out.printf("제목 : %s\n",article.title);
+					System.out.printf("내용: %s\n", article.content);
 				}
-				else if (cmd.equals("exit")) {
+				else if (rq.getUrlPath().equals("exit")) {
 					System.out.println("프로그램을 종료합니다.");
 					break;
 					}

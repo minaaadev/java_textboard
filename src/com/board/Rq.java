@@ -8,7 +8,7 @@ public class Rq {
 	private Map<String, String> params;
 	private String urlPath;
 	
-	Rq(String url) {
+	public Rq(String url) {
 		this.url = url;
 		params = Util.getParamsFromUrl(url);
 		urlPath=Util.getUrlFromUrl(url);

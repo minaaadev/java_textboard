@@ -1,6 +1,8 @@
 package com.board;
 
+//import java.util.ArrayList;
 import java.util.HashMap;
+//import java.util.List;
 import java.util.Map;
 
 public class Util {
@@ -32,15 +34,21 @@ public class Util {
 	public static String getUrlFromUrl(String url) {
         String[] urlBits = url.split("\\?", 2);
         return urlBits[0];
-    }
+    
+//	public static <T> List<T> reverseList(List<T> list) {
+//        List<T> reverse = new ArrayList<>(list.size());
+//
+//        //입력받은것의 복사본을 뒤집기
+//        for (int i = list.size() - 1; i >= 0; i--) {
+//            reverse.add(list.get(i));
+//        }
+
+}
+
+
+
 	public static Map<String, String> getParamsFromUrl(String url) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-//	public static String getUrlFromUrl(String url) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
 }

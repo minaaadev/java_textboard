@@ -1,16 +1,23 @@
 package com.board;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
-
+public class Main{
 	
-	
+	static void makeTestDate(List<Article> articles) {		
+		//테스트 게시물을 100개로 늘림
+		for(int i=1;i<=100;i++) {
+			articles.add(new Article(i,": 제목"+i,": 내용"+i));
+		}
+	}
+	//test게시물 늘리기
 	static void makeTestData(List<Article> articles) {
-		articles.add(new Article(1, "제목1", "내용1"));
-        articles.add(new Article(2, "제목2", "내용2"));
-        articles.add(new Article(3, "제목3", "내용3"));
+		for (int i=1; i<=100; i++) {
+			articles.add(new Article(i,"제목"+i,"내용"+i));
+		}
 	}
 	
 	
@@ -20,7 +27,7 @@ public class Main {
 		int articleLastId=0;
 		
 		List<Article> articles = new ArrayList<>();		
-		
+		Map<String, String> params=new HashMap<>();
 		
 		//프로그램 리펙토링 <=좀더 읽기 편한걸로 바꿔줌        
         makeTestData(articles);
@@ -63,22 +70,77 @@ public class Main {
 					System.out.println("번호/제목");
 					
 					
+					//검색 시작
+					List<Article> filteredArticles=articles;
+					
+					if(params.containsKey("searchKeyword")) {
+						String searchKeyword = params.get("searchKeyword");
+					
+						filteredArticles = new ArrayList<>();
+						
+						for(Article article : articles) {
+							//내가 입력한 키워드가 타이틀이나 컨텐트에 들어있다면
+							boolean matched = article.title.contains(searchKeyword) || article.content.contains(searchKeyword);
+						
+							if(matched) {
+								filteredArticles.add(article);
+							}
+						}
+					}
+					//검색 끝
+					
+					List<Article> sortedArticles = filteredArticles;
+					
+					boolean orderByIdDesc = true;
+							
+					
+					if(params.get("orderBy") != null && params.get("orderBy").equals("idAsc")) {
+						orderByIdDesc = false;
+					}
+					
+					if(orderByIdDesc) {
+						for (int i=articles.size()-1; i>=0; i--) {
+							Article article=articles.get(i);
+							System.out.printf("%d / %s\n",article.id, article.title);
+						}			
+					}
+			
+					else {
+						for(Article article : filteredArticles) {
+							System.out.printf("%d / %s\n",article.id, article.title);
+						}
+					}
 					
 					for (int i=articles.size()-1; i>=0; i--) {
 						Article article=articles.get(i);
 						System.out.printf("%d / %s\n",article.id, article.title);
 					}
 				}
-				else if(rq.getUrlPath().equals("/usr/article/detail")) {
+				else if(rq.getUrlPath().equals("/usr/article/detail")) {					
 					
-					Object lastArticle = null;
-					if(lastArticle==null) {
-						System.out.println("게시물이 존재하지 않습니다.");
-						continue;
+					System.out.println("게시물 번호 입력");
+					int id;
+					
+					try {
+						id=Integer.parseInt(sc.nextLine());
+					} catch(NumberFormatException e) {
+					System.out.println("올바른 숫자를 입력하세요");
+					continue;
+					}
+					
+					//게시물이 아예 없는 경우
+					if (articles.isEmpty() || id <= 0 || id > articles.size()) {
+					     System.out.println("해당 게시물은 존재하지 않습니다.");
+					     continue;
 					}
 					//마지막 게시물의 번호 가져옴
-					Article article=articles.get(articles.size()-1); 
+					Article article=articles.get(id-1); 
 					
+					//내가 찾는 게시물이 없는 경우
+					if(article==null) {
+						System.out.println("해당 게시물은 존재하지 않습니다");
+						continue;
+					}
 					System.out.println("===게시물 상세보기 ===");
 					System.out.printf("번호 : %d\n", article.id);
 					System.out.printf("제목 : %s\n",article.title);
@@ -96,6 +158,4 @@ public class Main {
 		System.out.println("== 프로그램 종료 ==");
 		sc.close();
 	}
-
-
 }

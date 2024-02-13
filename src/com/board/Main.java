@@ -13,13 +13,12 @@ public class Main{
 			articles.add(new Article(i,": 제목"+i,": 내용"+i));
 		}
 	}
-	//test게시물 늘리기
+	//test 게시물 늘리기
 	static void makeTestData(List<Article> articles) {
 		for (int i=1; i<=100; i++) {
 			articles.add(new Article(i,"제목"+i,"내용"+i));
 		}
-	}
-	
+	}	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -59,65 +58,33 @@ public class Main{
 				articleLastId++;
 				
 				Article article = new Article(id, title, content);
-				articles.add(article);
 				
 				articles.add(article); //list 에 게시물 추가
 				
 				System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
 			}
 				else if(rq.getUrlPath().equals("/usr/article/list")) {
-					System.out.println("==게시물 리스트==");
-					System.out.println("번호/제목");
 					
+					actionUsrArticleList(rq,articles);
+				}
 					
-					//검색 시작
-					List<Article> filteredArticles=articles;
-					
-					if(params.containsKey("searchKeyword")) {
-						String searchKeyword = params.get("searchKeyword");
-					
-						filteredArticles = new ArrayList<>();
-						
-						for(Article article : articles) {
-							//내가 입력한 키워드가 타이틀이나 컨텐트에 들어있다면
-							boolean matched = article.title.contains(searchKeyword) || article.content.contains(searchKeyword);
-						
-							if(matched) {
-								filteredArticles.add(article);
-							}
-						}
-					}
-					//검색 끝
-					
-					List<Article> sortedArticles = filteredArticles;
-					
-					boolean orderByIdDesc = true;
-							
-					
-					if(params.get("orderBy") != null && params.get("orderBy").equals("idAsc")) {
-						orderByIdDesc = false;
-					}
-					
-					if(orderByIdDesc) {
-						for (int i=articles.size()-1; i>=0; i--) {
-							Article article=articles.get(i);
-							System.out.printf("%d / %s\n",article.id, article.title);
-						}			
-					}
 			
 					else {
-						for(Article article : filteredArticles) {
-							System.out.printf("%d / %s\n",article.id, article.title);
-						}
-					}
+						//for(Article article : filteredArticles) {
+							//System.out.printf("%d / %s\n",article.id, article.title);
+						//}
+					//}
 					
 					for (int i=articles.size()-1; i>=0; i--) {
 						Article article=articles.get(i);
 						System.out.printf("%d / %s\n",article.id, article.title);
 					}
 				}
-				else if(rq.getUrlPath().equals("/usr/article/detail")) {					
-					
+				 if(rq.getUrlPath().equals("/usr/article/detail")) {					
+					if(params.containsKey("id") ==false) {
+						System.out.println("id를 입력해주세요");
+						continue;
+					}
 					System.out.println("게시물 번호 입력");
 					int id;
 					
@@ -152,10 +119,56 @@ public class Main{
 					}
 				else {
 					System.out.println("명령어를 잘못 입력하셨습니다.");
-				}
-			 
+				}		 
 		}
-		System.out.println("== 프로그램 종료 ==");
+		//System.out.println("== 프로그램 종료 ==");
 		sc.close();
+}
+	private static void actionUsrArticleList(Rq rq, List<Article> articles) {
+		// TODO Auto-generated method stub
+
+		System.out.println("==게시물 리스트==");
+		System.out.println("번호/제목");
+		
+		
+		Map<String, String> params = rq.getParam();
+		//검색 시작
+		List<Article> filteredArticles=articles;
+		
+		if(params.containsKey("searchKeyword")) {
+			
+			String searchKeyword = params.get("searchKeyword");
+		
+			filteredArticles = new ArrayList<>();
+			
+			for(Article article : articles) {
+				//내가 입력한 키워드가 타이틀이나 컨텐트에 들어있다면
+				boolean matched = article.title.contains(searchKeyword) || article.content.contains(searchKeyword);
+			
+				if(matched) {
+					filteredArticles.add(article);
+				}
+			}
+		}
+		//검색 끝
+		
+		List<Article> sortedArticles = filteredArticles;
+		
+		boolean orderByIdDesc = true;
+				
+		
+		if(params.get("orderBy") != null && params.get("orderBy").equals("idAsc")) {
+			orderByIdDesc = false;
+		}
+		
+		if(orderByIdDesc) {
+			for (int i=filteredArticles.size()-1; i>=0; i--) {
+				Article article=filteredArticles.get(i);
+				System.out.printf("%d / %s\n",article.id, article.title);
+			sortedArticles =Util.reverseList(sortedArticles);
+		}	
+			sortedArticles.stream()
+			.forEach(article->System.out.printf("%d / %s\n", article.id, article.title));
+		}//정렬 로직 끝
 	}
 }

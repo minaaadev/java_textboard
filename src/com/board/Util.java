@@ -1,7 +1,9 @@
 package com.board;
-
+import java.util.ArrayList;
+import java.util.Collections;
 //import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 //import java.util.List;
 import java.util.Map;
 
@@ -30,6 +32,11 @@ public class Util {
 		}
 	
 
+	public static <T> List<T> reverseList(List<T> list) {
+        List<T> reversedList = new ArrayList<>(list);
+        Collections.reverse(reversedList);
+        return reversedList;
+    }
 
 	public static String getUrlFromUrl(String url) {
         String[] urlBits = url.split("\\?", 2);
@@ -52,3 +59,10 @@ public class Util {
 		return null;
 	}
 }
+
+
+//	public static List<Article> reverseList(List<Article> sortedArticles) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//}
